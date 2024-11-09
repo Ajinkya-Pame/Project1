@@ -18,6 +18,10 @@ const deliveryPostSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   username: { type: String, required: true },
   email: { type: String, required: true },
+  parcelImage: {
+    data: Buffer,
+    contentType: String
+  }
 });
 
 module.exports = mongoose.model("DeliveryPost", deliveryPostSchema);

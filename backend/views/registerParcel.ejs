@@ -30,8 +30,8 @@
         <!-- Main Content -->
         <main class="flex-1 pt-6 pb-12">
             <section class="register-parcel-container mx-auto max-w-3xl bg-white p-8 rounded-lg shadow-lg">
-                <form id="deliveryPostForm" action="/sender-post" method="POST" class="space-y-6" novalidate
-                    onsubmit="return validatePaymentRange(event)">
+                <form id="deliveryPostForm" action="/sender-post" method="POST" nctype="multipart/form-data"
+                    class="space-y-6" novalidate onsubmit="return validatePaymentRange(event)">
                     <!-- Product Name -->
                     <div>
                         <label for="productName" class="block font-semibold text-gray-700">Product Name:</label>
@@ -167,7 +167,12 @@
                     <input type="hidden" name="userId" value="<%= user.id %>">
                     <input type="hidden" name="username" value="<%= user.username %>">
                     <input type="hidden" name="email" value="<%= user.email %>">
-
+                    <div>
+                        <label for="parcelImage" class="block font-semibold text-gray-700">Upload Parcel Image:</label>
+                        <input type="file" id="parcelImage" name="parcelImage" accept="image/*"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+                        <p id="parcelImageError" class="text-red-600 hidden">Please upload an image of the parcel.</p>
+                    </div>
                     <!-- Submit Button -->
                     <div class="text-center">
                         <button type="submit"

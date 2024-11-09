@@ -10,10 +10,16 @@ const methodOverride = require("method-override");
 const User = require("./models/User");
 const ContactMail = require("./models/contact-mail");
 const passport = require("passport");
+const multer = require("multer");
 // Initialize the app
 const app = express();
 dotenv.config();
 const saltRounds = 10;
+
+
+const storage = multer.memoryStorage();  // Store file in memory (use diskStorage if you want to store in a folder)
+const upload = multer({ storage: storage });
+
 
 require("./config/passport");
 
@@ -318,7 +324,7 @@ app.get("/logout", (req, res) => {
   });
 });
 
-app.post("/sender-post", async (req, res) => {
+app.post("/sender-post", upload.single("parcelImage"), async (req, res) => {
   const {
     productName,
     productWeight,
@@ -339,7 +345,12 @@ app.post("/sender-post", async (req, res) => {
     email,
   } = req.body;
   // console.log(userId, username, email);
-
+  if (!req.file) {
+    console.log("No image uploaded.");
+    return res.status(400).send("Please upload an image with the form.");
+  } else {
+    console.log("Image uploaded successfully.");
+  }
   try {
     const newPost = new DeliveryPost({
       productName,
@@ -359,6 +370,10 @@ app.post("/sender-post", async (req, res) => {
       userId,
       username,
       email,
+      parcelImage: req.file ? {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      } : undefined,
     });
 
     await newPost.save();
